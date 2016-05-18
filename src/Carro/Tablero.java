@@ -26,18 +26,23 @@ public class Tablero extends JPanel implements ActionListener{
     Carro c2= new Carro();
     Obstaculo o1= new Obstaculo();
     private ServerSocket serverSocket ;
-    private Socket cliente ;
+    private Socket carro1 ;
+    private Socket carro2;
     
     
-    public Tablero() throws IOException{
+    public Tablero() throws IOException, InterruptedException{
             this.c1 = new Carro();
+            this.c2= new Carro();
             this.serverSocket = new ServerSocket(8000);
             
             
-            cliente=this.serverSocket.accept();
+            carro1=this.serverSocket.accept();
+            carro2=this.serverSocket.accept();
             System.out.println("Acepte un cliente");
-            Thread proceso = new Thread(new Hilo(cliente,c1));
+            Thread proceso = new Thread(new Hilo(carro1,c1));
+            Thread proceso2 = new Thread(new Hilo(carro2,c2));
             proceso.start();
+            proceso2.start();
             this.timer = new Timer(50, this);
             this.timer.start();
        
@@ -47,6 +52,7 @@ public class Tablero extends JPanel implements ActionListener{
      protected void paintComponent (Graphics g){
         super.paintComponent(g);
         c1.dibujar(g);
+        c2.dibujar(g);
         
         
     }
