@@ -13,13 +13,13 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 /**
  *
- * @author Estudiante
+ * @author Diego Chacon 
  */
 public class Main {
         public static void main(String[] args) throws IOException {
         JFrame frame = new JFrame();
         frame.setTitle("Carro Cliente");
-        frame.setSize(new Dimension(1000, 1000));
+        frame.setSize(new Dimension(500, 500));
         frame.setLocationRelativeTo(null);
         frame.add(new Tablero());
         frame.setVisible(true);

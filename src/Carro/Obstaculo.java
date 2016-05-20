@@ -12,22 +12,29 @@ import java.awt.Rectangle;
 
 /**
  *
- * @author Estudiante
+ * @author Diego Chacon 
  */
 public class Obstaculo {
     private int y;
     private int x;
+
+    public Obstaculo(int x, int y) {
+        this.y = y;
+        this.x = x;
+    }
+
     
     
-    protected void dibujar (Graphics g){
+    
+    public void dibujar (Graphics g){
         
         
-        g.fillOval(x+200, y+300, 50, 50);
-       g.drawRect(x+200, y+300, 50, 50);
+       g.fillOval(x+40, y+50, 10, 10);
+      
         
     }
     public Rectangle obtenerRectangulo(){
-            return new Rectangle(x+200, y+300, 50,50);
+            return new Rectangle(x+40, y+50, 10,10);
         }
     public void mover(){
         this.x+=1;

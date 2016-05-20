@@ -15,20 +15,21 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
  *
- * @author Estudiante
+ * @author Diego Chacon 
  */
 public class Tablero extends JPanel implements ActionListener, KeyListener{
     
     private Timer timer;
-    Carro c1= new Carro();
-    Carro c2= new Carro();
-    Obstaculo o1= new Obstaculo();
+    Carro c1= new Carro(10,30);
+    ArrayList <Obstaculo> obstaculos;
+    
     private Socket cliente ;
     private DataInputStream entrada;
     private DataOutputStream salida;
@@ -38,18 +39,29 @@ public class Tablero extends JPanel implements ActionListener, KeyListener{
     public Tablero() throws IOException{
         this.timer= new Timer(50, this);
         this.setFocusable(true);
-        
+        this.obstaculos = new ArrayList();
+        this.obstaculos.add(new Obstaculo(100,100));
+        this.obstaculos.add(new Obstaculo(150,150));
+        this.obstaculos.add(new Obstaculo(250,90));
+        this.obstaculos.add(new Obstaculo(300,250));
+        this.obstaculos.add(new Obstaculo(130,400));
         addKeyListener(this);
         cliente=new Socket("localhost",8000);
         System.out.println("Me conecte a un servidor");
         
         this.salida = new DataOutputStream(cliente.getOutputStream());
+        this.entrada= new DataInputStream(cliente.getInputStream());
         this.timer.start();
+        
     }
     
      protected void paintComponent (Graphics g){
         super.paintComponent(g);
+        for(Obstaculo o1: obstaculos){
+            o1.dibujar(g);
+        }
         c1.dibujar(g);
+        
         
         
     }
@@ -57,11 +69,11 @@ public class Tablero extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void actionPerformed(ActionEvent e){
-      
+       validarColisiones();
        repaint();
        
        
-    }
+    }    
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -106,11 +118,20 @@ public class Tablero extends JPanel implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
         
     }
-    public void validarColisiones(){
+    public void validarColisiones() {
+        ArrayList <Obstaculo> copia = (ArrayList <Obstaculo>) this.obstaculos.clone();
         Rectangle r1= this.c1.obtenerRectangulo();
-        Rectangle r2= this.o1.obtenerRectangulo();
-        if(r1.intersects(r2)){
-            JOptionPane.showMessageDialog(null, "Colision");
-        }
+        for(Obstaculo o1 : obstaculos){
+           Rectangle RecCir = o1.obtenerRectangulo();
+           if(r1.intersects(RecCir)){
+               copia.remove(o1);
+               
+           }
+           this.obstaculos=copia;   
+           
     }
+
+ 
+   
+}
 }

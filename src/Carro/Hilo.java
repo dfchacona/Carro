@@ -16,15 +16,17 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author B106 PC-11
+ * @author Diego Chacon 
  */
 public class Hilo implements Runnable{
     private Socket socket ; 
     DataInputStream entrada;
     DataOutputStream salida;
     private Carro personajePrincipal;
+    private Tag tag; 
     
-    public Hilo(Socket socket,Carro personajePrincipal) throws IOException{
+    public Hilo(Socket socket,Carro personajePrincipal, Tag tag) throws IOException{
+      this.tag=tag;
       this.socket = socket;
       this.entrada = new DataInputStream(socket.getInputStream());
       this.salida = new DataOutputStream(this.socket.getOutputStream());
@@ -37,14 +39,24 @@ public class Hilo implements Runnable{
             try {
                 
                 int recibi = this.entrada.readInt();
-                System.out.println("recibi"  + recibi);
+                
                 switch (recibi) {
                 case 1: 
-                    this.personajePrincipal.setX(this.personajePrincipal.getX() - 10 );
+                    this.tag.setX(this.tag.getX()-5);
+                    this.personajePrincipal.setX(this.personajePrincipal.getX() - 5);
                     break;
-                case 2: this.personajePrincipal.setX( this.personajePrincipal.getX() +10); break;
-                case 3: this.personajePrincipal.setY(this.personajePrincipal.getY() -10); break;
-                case 4: this.personajePrincipal.setY(10 + this.personajePrincipal.getY()); break;
+                    
+                case 2:
+                    this.tag.setX(this.tag.getX()+5);
+                    this.personajePrincipal.setX( this.personajePrincipal.getX() +5); break;
+                    
+                case 3: 
+                    this.tag.setY(this.tag.getY()-5);
+                    this.personajePrincipal.setY(this.personajePrincipal.getY() -5); break;
+                    
+                case 4:
+                    this.tag.setY(this.tag.getY()+5);
+                    this.personajePrincipal.setY( this.personajePrincipal.getY()+5); break;
               }
                 
             } catch (IOException ex) {
